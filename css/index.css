@@ -43,6 +43,7 @@ body {
     margin-right: auto;
     margin-left: auto;
     max-width: 70%;
+    height: 250px;
 }
 
 .row {
