@@ -1,0 +1,137 @@
+body {
+    background: black;
+    overflow: hidden;
+    margin-left: 0 !important;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.charts {
+    margin-top: 5px;
+    width: auto;
+}
+
+.content {
+}
+
+.catsName{
+    margin-top: 3vh;
+    font-family: "Segoe UI",sans-serif;
+    color: white;
+}
+
+.catName {
+    font-family: "Monoton", sans-serif;
+    color: red;
+    text-shadow: 0 0 80px red, 0 0 30px FireBrick, 0 0 6px DarkRed;
+    margin: 10px !important;
+    font-size: 6vh;
+}
+
+.nomineeName {
+    margin: 5px 0 !important;
+    padding: 0 !important;
+    font-family: "Segoe UI", sans-serif;
+    color: white;
+    line-height: 2rem;
+    font-size: 3vh;
+}
+
+.nomineeImg {
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 70%;
+}
+
+.row {
+    justify-content: center;
+    text-align: center;
+    margin: 0 !important;
+}
+
+.owl-nav {
+    font-size: 80px;
+    display: flex;
+    width: auto;
+    color: white;
+    right: 5vh !important;
+    bottom: 15px !important;
+    position: fixed;
+    justify-content: center;
+}
+
+*:focus {
+    outline: 0 !important;
+}
+
+.owl-dots, .owl-dot {
+    margin: 5px;
+    width: auto;
+    min-width: 20px;
+    height: 1vh;
+}
+
+.owl-dot span {
+    position: fixed;
+    bottom: 10px;
+    border-radius: 50%;
+    background-color: whitesmoke;
+    height: 2vh;
+    width: 2vh;
+    display: block;
+}
+
+.owl-dot.active span {
+    background-color: red;
+}
+
+img {
+    max-width: 250px;
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+#info {
+    background-color: #FFFFFF;
+}
+
+.redCarpetText {
+    margin: 2vh !important;
+}
+
+.redCarpet {
+    margin-top: 6vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 6vh;
+    font-family: "Monoton", sans-serif;
+    color: red;
+    text-shadow: 0 0 80px red, 0 0 30px FireBrick, 0 0 6px DarkRed;
+}
+
+.redCarpet div{
+    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.red-carpet-link {
+    position: fixed;
+    color: white;
+}
+
+.red-carpet-link{
+    color: #FFFFFF;
+    font-family: "Segoe UI","sans-serif";
+    font-size: 1.5vh;
+    top: 0;
+}
+
+#owl-carousel-container{
+    padding-top: 2vh !important;
+}

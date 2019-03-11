@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Live Charts</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta itemprop="image" content="https://udaan18.com/favicon.png">
+
+    <meta name="keywords" content="bvm, udaan, udaan18, udaan2018, udaan2k18, bvm-techfest, techfest">
+    <meta name="author" content="bvmites">
+    <meta name="description"
+          content="Udaan, the annual techfest of Birla Vishvakarma Mahavidyalaya Engineering College, Vallabh Vidyanagar">
+
+    <meta itemprop="name" content="Red Carpet 2018">
+    <meta itemprop="description"
+          content="Udaan, the annual techfest of Birla Vishvakarma Mahavidyalaya Engineering College, Vallabh Vidyanagar">
+    <meta itemprop="image" content="https://livecharts.udaan18.com/favicon.png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Red Carpet">
+    <meta property="og:image" content="https://livecharts.udaan18.com/favicon.png">
+    <meta property="og:description"
+          content="Udaan, the annual techfest of Birla Vishvakarma Mahavidyalaya Engineering College, Vallabh Vidyanagar">
+    <meta property="og:site_name" content="Udaan 2018">
+    <meta property="og:url" content="https://livecharts.udaan18.com"/>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <link rel="shortcut icon" href="favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/flexboxgrid.min.css">
+    <link rel="stylesheet" href="css/flexboxgrid-helpers.min.css">
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/Chart.bundle.js"></script>
+    <script src="js/socket.io.js"></script>
+    <script src="js/handlebars-v4.0.11.js"></script>
+    <script src="js/categories.js"></script>
+</head>
+<style>
+    @media only screen and (max-width: 48em) and (orientation: portrait) {
+        body {
+            overflow-y: scroll !important;
+        }
+        .redCarpet {
+            font-size: 3vh;
+            margin: 1vh;
+        }
+        .redCarpetText{
+            margin: 1vh !important;
+        }
+    }
+
+</style>
+<body>
+<div>
+
+    <div class="row content">
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat0"></canvas>
+            <div class="catsName"><span>Sports Person of The Year</span></div>
+        </div>
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat1"></canvas>
+            <div class="catsName"><span>Artist of The Year (Male)</span></div>
+        </div>
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat2"></canvas>
+            <div class="catsName"><span>Ms. Persona</span></div>
+        </div>
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat3"></canvas>
+            <div class="catsName"><span>Face of The Year (Female)</span></div>
+        </div>
+    </div>
+    <div class="row content redCarpetText">
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat4"></canvas>
+            <div class="catsName"><span>Artist of The Year (Female)</span></div>
+        </div>
+        <div class="charts col-sm-12 col-xs-12 col-md-6 col-lg-6 middle-lg">
+            <div class="redCarpet">
+                Red Carpet 2018
+            </div>
+            <div class="catsName"><h3><b>Voting : https://redcarpet.udaan18.com</b></h3></div>
+        </div>
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat5"></canvas>
+            <div class="catsName"><span>Mr. Persona</span></div>
+        </div>
+
+    </div>
+    <div class="row content">
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat6"></canvas>
+            <div class="catsName"><span>Face of The Year (Male)</span></div>
+        </div>
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat7"></canvas>
+            <div class="catsName"><span>Style Icon of The Year (Female)</span></div>
+        </div>
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat8"></canvas>
+            <div class="catsName"><span>Rising Star</span></div>
+        </div>
+        <div class="charts col-sm-6 col-xs-6 col-md-3 col-lg-3 middle-lg">
+            <canvas id="cat9"></canvas>
+            <div class="catsName"><span>Style Icon of The Year (Male)</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const socket = io("udaan18-red-carpet.herokuapp.com/charts");
+    let chartData = {};
+    let charts = {};
+    let pieCharts = [];
+    const setData = (votes) => {
+        chartData = {
+            chart: votes
+        };
+        charts = chartData.chart.map((data, index) => {
+            return {
+                el: $("#cat" + index),
+                data: data.votes.sort(function (a, b) {
+                    return a > b ? 1 : -1;
+                })
+            }
+        });
+        pieCharts = charts.map(function (e) {
+            return new Chart(e.el, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        label: "# of votes",
+                        data: e.data,
+                        backgroundColor: [
+                            'rgba(246, 83, 20, 1)',
+                            'rgba(0, 161, 241, 1)',
+                            'rgba(255, 187 , 0, 1)',
+                            'rgba(124, 187, 0, 1)'
+                        ],
+                        borderColor: [
+                            'rgba(0,0,0,1)',
+                            'rgba(0,0,0, 1)',
+                            'rgba(0,0,0, 1)',
+                            'rgba(0,0,0, 1)'
+                        ]
+                    }],
+                },
+                options: {
+                    rotation: Math.PI,
+                    responsive: true,
+                    tooltips: false,
+                    responsiveAnimationDuration: 0,
+                    maintainAspectRatio: true,
+                    animation: {
+                        animateRotate: false
+                    }
+                }
+            });
+        });
+
+    };
+
+    socket.on('init', (votes) => {
+        let category = votes.map(function (cat) {
+            const result = data.categories.find(function (c) {
+                return c._id === cat.categoryId;
+            });
+            if (result) {
+                return {...cat, name: result.title, nominees: result.nominees};
+            }
+            else
+                return cat;
+        });
+        // console.log(category);
+
+        setData(category);
+    });
+
+    socket.on('vote', (votes) => {
+        updateData(pieCharts, votes);
+    });
+
+
+    const updateData = (pieCharts, votes) => {
+        chartData = {
+            chart: votes
+        };
+
+        charts = chartData.chart.map((data, index) => {
+
+            return {
+                el: $("#cat" + index),
+                data: data.votes
+            }
+        });
+        // console.log(charts)
+        for (let i = 0; i < pieCharts.length; i++) {
+            pieCharts[i].data.datasets[0].data = charts[i].data.sort(function (a, b) {
+                return a > b ? 1 : -1;
+            });
+            pieCharts[i].update();
+        }
+
+    };
+
+</script>
+</body>
+</html>
